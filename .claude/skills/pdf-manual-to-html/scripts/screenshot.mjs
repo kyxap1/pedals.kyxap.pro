@@ -11,8 +11,9 @@
 // A single capture taller than about 16,000 px comes back with the page
 // repeated from the top, so the page is written as numbered segments:
 // out.png -> out-01.png, out-02.png, …, plus out-map.txt naming the heading
-// ids that start in each segment. It also prints the page's scrollWidth,
-// which exceeds <width> when something scrolls the page sideways.
+// ids that start in each segment, each with its y there (`intro@412`). It
+// also prints the page's scrollWidth, which exceeds <width> when something
+// scrolls the page sideways.
 //
 // Usage: node screenshot.mjs <url> <out.png> <width> [timeoutSeconds=30] [segmentHeight=3000]
 
@@ -133,8 +134,13 @@ async function run() {
   const num = (n) => String(n).padStart(2, "0");
   // which segment each heading starts in, so a reviewer gets only the
   // segments for its own sections
+  // `id@y`: y is the heading's offset inside that segment, for cropping a
+  // section without opening the segment
   const map = Array.from({ length: count }, () => []);
-  for (const [id, top] of headings) map[Math.min(count - 1, Math.floor(top / segment))].push(id);
+  for (const [id, top] of headings) {
+    const i = Math.min(count - 1, Math.floor(top / segment));
+    map[i].push(`${id}@${Math.round(top - i * segment)}`);
+  }
   const name = (i) => `${stem.split("/").pop()}-${num(i + 1)}.png`;
   writeFileSync(`${stem}-map.txt`, map.map((ids, i) => `${name(i)}: ${ids.join(" ")}`).join("\n") + "\n");
   for (let i = 0; i < count; i++) {

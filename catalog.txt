@@ -14,6 +14,7 @@
 + NUX Atlantic
 + NUX NMP-2 Dual Footswitch
 + Old Blood Noise Endeavors MTET
++ One Control Minimal Series 1 Loop Box
 + Pirate MIDI Bridge4
 + Pirate MIDI CLiCK v2
 + Radial ProRMP Reamper

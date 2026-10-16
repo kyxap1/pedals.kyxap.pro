@@ -15,6 +15,7 @@ need pngquant pngquant
 need oxipng oxipng
 need jpegoptim jpegoptim
 need node node
+need tesseract tesseract
 
 if ! python3 -c 'import PIL' 2>/dev/null; then
   echo "missing: Pillow — python3 -m pip install pillow"; status=1

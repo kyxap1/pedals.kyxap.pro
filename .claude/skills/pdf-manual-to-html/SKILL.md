@@ -509,6 +509,13 @@ what's missing leaves what is wrong exactly as wrong, and re-running it after
 an edit proves only that it is idempotent. Check a result against the source
 with something that had no hand in producing it.
 
+Before trusting a check, confirm it had something to read. A tool run on an
+input it can't parse reports everything as wrong, or nothing at all, and
+either reads as a verdict. Give it an independent source instead: a PDF with
+no text layer gets an OCR'd copy of its 300-dpi renders for `check_copy.py`
+(`tesseract p-N.png _cctmp.<slug>/ocr-pN -l eng --psm 4 pdf`, one per page),
+its misreads (9↔S, 3PDT↔SPDT, O↔Q, I↔l) settled against the render.
+
 A scan over the copy has to reach the short text too. A length threshold
 picked to hold the noise down cuts out headings, captions and labels — the
 text most likely to be invented, and the worst place for it, because a reader
@@ -576,7 +583,8 @@ findings share one cause (a heading outside its `.keep-together`, a missing
   another width only to look at a finding it named there. It drives Chrome over CDP, captures the page's real height as
   numbered segments (`w1400-01.png`, `w1400-02.png`, …; a single capture
   past ~16,000 px repeats the page from the top), writes `w1400-map.txt`
-  naming the heading ids each segment starts, and prints the page's
+  naming the heading ids each segment starts, each with its y in that
+  segment (`intro@412`), and prints the page's
   `scrollWidth`. Don't use `chrome --headless --screenshot --window-size=W,H`
   by hand: it crops to exactly W×H instead of the page's real height, and it
   has no timeout flag, so a bad size hangs with no way to detect it.
@@ -623,6 +631,14 @@ findings share one cause (a heading outside its `.keep-together`, a missing
     it found; separate files keep parallel reviewers from editing one file. A group that comes back with
     `todo` lines left, or never comes back, gets a new reviewer for those
     lines only — including in a later session after a limit.
+  - Cut each section's comparison material before launching, without opening
+    it yourself: the section's region of the 300-dpi PDF render beside its
+    stretch of the 1400 screenshot, one `montage` pair per section
+    (`_cctmp.<slug>/review/pair-<id>.png`), named on its progress line. The
+    map's `id@y` gives where the section starts and the next heading where it
+    ends; the PDF region is the one you wrote the section from. Most of a
+    reviewer's round trips otherwise go to finding each section in the PDF
+    and the screenshots, which the builder already knows.
   - Reviewers edit nothing but their progress file and report each finding as
     text: section id, segment file, what the page shows, what the PDF shows.
 - **Redo Loop:** If the reviewer finds issues, **kick yourself (the main model) to fix the glitching parts**. You must redo the broken parts and re-screenshot them. You can loop this review-fix cycle **a maximum of 2 times in a row**. A re-review gets the previous findings and checks those and the sections the fixes touched, not the whole page again — a full pass costs as much as the build's own looking. Set those sections back to `todo` in their progress files and hand only them out.

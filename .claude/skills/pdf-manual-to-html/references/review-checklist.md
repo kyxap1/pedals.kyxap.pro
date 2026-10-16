@@ -23,9 +23,11 @@ run gets expensive fast. None of this narrows what you check:
   and table cells with the PDF text; its misses that aren't in
   `copy-changes.md` are findings. Spend your looks on what text can't
   show: layout, figures, formatting, tables' structure, the masthead.
-- **Sheets first.** Set a section's segments and its PDF pages side by side
-  in a `montage` sheet; open a full image only where the sheet is too small
-  to answer, cropped to that region.
+- **Pairs first.** Each progress line names the section's pair, its PDF
+  region beside its desktop screenshot, cut by the builder: compare from it.
+  Where no pair covers a question, set the segments and PDF pages side by
+  side in a `montage` sheet; open a full image only where a pair or sheet is
+  too small to answer, cropped to that region.
 - **Use what you were given.** Don't shoot new screenshots — name a missing
   width in the report. Weights are in the extract's `fonts-used.txt`; read
   it, don't re-run the extraction. The skill, memory and other pedals'
