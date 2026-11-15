@@ -1,0 +1,255 @@
+/* Fonts: SofiaPro-Black 900 -> Outfit 900 (headings, cover title);
+   Inter-Light 300 -> Inter 300 (body); Inter-Regular 400 -> Inter 400
+   (control names, run-ins, labels, URLs). Futura sets only diagram labels. */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Outfit:wght@900&display=swap");
+
+:root {
+  --ink: #000;       /* body text */
+  --accent: #4298cc; /* the cover's blue ground */
+  --rule: #000;      /* the symbol table's outline */
+  --paper: #f1f1f1;
+  --muted: #5e5e5e;
+  --link: #1f6fa3;   /* the cover blue, darkened for contrast on white */
+  --deep: #1f6fa3;   /* bars and badges: white text needs this contrast */
+  --tint: #e2f0f9;   /* the cover blue, lightened: table row headers */
+  --body-font: "Inter", system-ui, sans-serif;
+  --head-font: "Outfit", "Inter", system-ui, sans-serif;
+}
+
+/* ---- structure: keep as is, restyle below the brand line ---- */
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin-top: 0; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: #fff;
+  font-family: var(--body-font);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+h1, h2, h3, h4, h5, h6 { font-family: var(--head-font); line-height: 1.2; }
+
+main { margin-left: 20vw; padding-bottom: 3em; }
+footer { margin-left: 20vw; padding: 1.6em 3em; }
+
+a { color: var(--link); }
+
+img { max-width: 100%; height: auto; margin-bottom: 0.75em; }
+.topic > img, li > img, figure > img { display: block; }
+figure { margin: 0 0 1em; }
+
+/* NAV */
+#side-nav {
+  position: fixed; top: 0; left: 0;
+  width: 20vw; height: 100%;
+  overflow-y: auto;
+  background: #fff;
+  border-right: 1px solid var(--rule);
+  z-index: 5;
+}
+.nav-container { display: flex; flex-direction: column; margin: 1.5em 1em; }
+#side-nav h4, #side-nav h5 { font-weight: 400; margin-bottom: 0.45em; }
+#side-nav h4 { font-weight: 700; }
+#side-nav h5 { font-size: 0.9em; margin-left: 1em; }
+#side-nav a, #toc-mobile a { color: inherit; text-decoration: none; }
+#side-nav a:hover, #toc-mobile a:hover { text-decoration: underline; }
+
+/* SECTIONS */
+section + section { margin-top: 3em; }
+.flex-container { display: flex; padding-left: 2em; }
+/* A container has no intrinsic width: a half-container sized by its
+   content (width: auto) collapses to 0 unless it sets container-type: normal. */
+.half-container { width: 100%; padding: 0 1em; container-type: inline-size; }
+.half-container > header { column-span: all; }
+.flow > * + * { margin-bottom: 1em; }
+
+/* One .topic per heading carries the columns, so no column runs taller than
+   one topic. 63rem below = the two-column threshold of `columns: 2 30rem`. */
+.topic { columns: 2 30rem; column-gap: 3em; }
+.no-columns { columns: auto !important; }
+/* a heading stands above everything it introduces. column-span needs a
+   block-level box: a pill heading takes width: fit-content, never inline-block */
+:not(.topic-group) > .topic > .keep-together:first-child > :is(h3, h4):first-child,
+:not(.topic-group) > .topic > :is(h3, h4):first-child { column-span: all; }
+/* topics the source sets on one page share its columns, each whole in one */
+.topic-group { columns: 2 30rem; column-gap: 3em; }
+.topic-group > .topic { columns: auto; break-inside: avoid; }
+/* the right column's first heading loses its margin at the break; so does the left's */
+.topic-group > .topic:first-child,
+.topic-group > .topic:first-child > :is(h3, h4):first-child,
+.topic-group > .topic:first-child > .keep-together:first-child > :is(h3, h4):first-child { margin-top: 0; }
+
+/* COLUMN BREAKS. A paragraph, list item, figure, table or callout is never
+   cut by the gutter. Chrome's balancer drops `break-after: avoid` when it
+   gets in the way, so it is only a hint: what keeps a heading off a column's
+   foot is a .keep-together holding the heading and its first block. */
+p, li, figure, table, .table-scroll, .keep-together, .callout, .grid-wrapper {
+  break-inside: avoid;
+}
+h2, h3, h4, h5, h6 { break-after: avoid; }
+/* a lead-in ending in ":" stays with what it introduces */
+:has(+ p > .menu-path:only-child) { break-after: avoid; }
+@container (min-width: 63rem) {
+  .column-end { break-after: column; }
+}
+
+/* Figure rows: the max stays indefinite, or auto-fit counts its tracks off
+   it and stacks one figure per row in a narrow column. */
+.grid-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(8em, 100%), 1fr));
+  gap: 1em;
+}
+.grid-wrapper img { width: 100%; }
+
+/* TABLES */
+.table-scroll { overflow-x: auto; margin-bottom: 1em; }
+.doc-table { width: 100%; border-collapse: collapse; font-size: 0.92em; }
+.doc-table th, .doc-table td {
+  padding: 0.4em 0.6em;
+  text-align: left;
+  vertical-align: top;
+  border: 1px solid var(--rule);
+}
+.doc-table thead th { background: var(--accent); color: #fff; }
+
+.callout {
+  background: var(--paper);
+  border-left: 4px solid var(--accent);
+  padding: 0.7em 1em;
+  margin-bottom: 1em;
+}
+.callout > :last-child { margin-bottom: 0; }
+
+@media (max-width: 900px) {
+  .flex-container { flex-direction: column; padding-left: 0; }
+  .half-container { padding: 0 1em; }
+  nav { display: none; }
+  main, footer { margin: 0 auto; }
+  footer { padding: 1.6em 1em; }
+  #toc-mobile { display: block; }
+  /* a diagram with small labels scrolls instead of shrinking */
+  .wide-figure { overflow-x: auto; }
+  .wide-figure img { min-width: 700px; }
+}
+/* 901, not 900: at exactly 900px both queries match and the mobile TOC
+   would vanish together with the nav */
+@media (min-width: 901px) { #toc-mobile { display: none; } }
+
+/* ---- brand: masthead, heading treatment, callouts, from this manual ---- */
+
+/* The Supro print is plain black-on-white; the treatments below follow the
+   BOSS RC-5 page (block-and-rule chapters, reversed section bars, coloured
+   terms, badges, boxes, numbered steps), recoloured to the Supro cover blue. */
+
+body { font-weight: 300; }
+/* the manual's emphasis is Inter Regular against Light body text */
+strong, b { font-weight: 400; }
+
+/* MASTHEAD: the cover's blue wave ground; logo and title left, the document
+   name flush right over a heavy rule as on the RC-5 page, the amp beside */
+#masthead {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5em 3em;
+  padding: 2.5em 3em;
+  margin-bottom: 2.5em;
+  background: var(--accent) url("Images/cover-waves.jpg") center / cover;
+}
+.title-panel { flex: 1 1 20em; max-width: 34rem; }
+#masthead h1 { margin: 0; font-family: var(--head-font); font-weight: 900; font-size: 2.6rem; letter-spacing: 0.09em; line-height: 1.1; }
+#masthead h1 img { display: block; width: 14rem; margin: 0 0 0.6rem; }
+#masthead h1 span { display: block; }
+.doc-type {
+  margin: 0.6em 0 0;
+  font-size: 1.6rem;
+  font-weight: 400;
+  text-align: right;
+  border-bottom: 3px solid #000;
+}
+.photo-panel .photo { display: block; width: min(22rem, 70vw); margin: 0; }
+
+/* HEADINGS (in .flow only: the accent stays off the TOCs): chapter behind a blue block over a blue rule; section reversed
+   out of a blue bar; both keep the manual's Sofia Pro Black caps */
+.flow h2, .flow h3 { font-weight: 900; }
+.flow h2 {
+  font-size: 1.9rem;
+  color: #000;
+  border-left: 0.4em solid var(--accent);
+  border-bottom: 3px solid var(--accent);
+  padding: 0.1em 0 0.05em 0.35em;
+  margin: 0 0 0.9em;
+}
+.flow h3 {
+  font-size: 1.35rem;
+  color: #fff;
+  background: var(--deep);
+  padding: 0.15em 0.4em;
+  margin: 1.6em 0 0.8em;
+}
+/* control names and troubleshooting cases: coloured terms, as RC-5's */
+.flow h4 { font-family: var(--body-font); font-weight: 600; font-size: 1.05rem; color: var(--deep); margin: 0 0 0.15em; }
+#side-nav h4, #side-nav h5, #toc-mobile h4, #toc-mobile h5 { font-family: var(--body-font); color: inherit; }
+#toc-mobile h4 { font-weight: 700; margin-bottom: 0.45em; }
+#toc-mobile h5 { font-weight: 400; font-size: 0.9em; margin: 0 0 0.45em 1em; }
+
+/* SAFETY: pictogram column tinted like RC-5's row headers */
+.symbols { border-collapse: collapse; max-width: 44rem; margin: 0 auto 1.5em; }
+.symbols td { border: 1px solid var(--deep); padding: 0.6em 1em; vertical-align: middle; }
+.symbols td:first-child { width: 6.5em; text-align: center; background: var(--tint); }
+.symbols img { width: 4.5em; margin: 0; mix-blend-mode: multiply; }
+.safety-list { padding-left: 1.2em; }
+.safety-list li { margin-bottom: 0.45em; }
+.badge {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.8em;
+  letter-spacing: 0.03em;
+  color: #fff;
+  background: var(--deep);
+  padding: 0 0.4em;
+  margin-right: 0.3em;
+}
+.badge.caution { background: #000; }
+
+/* FRONT PANEL: the drawing spans the topic like the print; descriptions flow in columns */
+.panel-figure { column-span: all; max-width: 60rem; margin-bottom: 1.5em; }
+.panel-figure img, .tubes-figure img, .rear-layout figure img { width: 100%; }
+.control { break-inside: avoid; margin-bottom: 1em; }
+.control p { margin-bottom: 0; }
+
+/* REAR PANEL: the tall jack plate sits beside its two entries, as printed */
+.rear-layout { display: grid; grid-template-columns: 1fr 17rem; gap: 2em; align-items: start; max-width: 60rem; }
+.rear-layout figure { margin: 0; }
+.tubes-figure { max-width: min(44em, 100%); }
+
+/* TROUBLESHOOTING: each case in a ruled box */
+.box {
+  border: 1px solid #8a8a8a;
+  border-radius: 4px;
+  padding: 0.6em 0.9em;
+  margin-bottom: 1em;
+}
+.box > :last-child { margin-bottom: 0; }
+
+/* STEPS: numbers in the accent, as RC-5's */
+ol.steps { padding-left: 1.6em; }
+ol.steps > li { margin-bottom: 0.4em; }
+ol.steps > li::marker { color: var(--deep); font-weight: 700; }
+
+.legal { font-size: 0.92em; }
+.addresses { display: flex; flex-wrap: wrap; gap: 1em 3em; margin-top: 1.5em; }
+
+footer { font-size: 0.9em; color: var(--muted); border-top: 1px solid #ddd; }
+
+@media (max-width: 900px) {
+  #masthead { padding: 2em 1em; gap: 1.5em; }
+  #masthead h1 { font-size: 2rem; }
+  /* the mobile TOC comes right under the masthead, before section 1 */
+  #toc-mobile { order: -1; margin-bottom: 2em; }
+  .rear-layout { grid-template-columns: 1fr; }
+  .rear-layout figure { width: min(17rem, 100%); margin: 0 auto; }
+}
