@@ -1,0 +1,234 @@
+/* Fonts: the PDF sets everything in ArialMT 400 / Arial-BoldMT 700; the
+   style follows morleyproducts.com instead: body Open Sans 400, bold run-ins
+   700, headings Raleway 600 uppercase. */
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Raleway:wght@600&display=swap");
+
+:root {
+  /* the site's #777 body grey misses 4.5:1 on white; one step darker */
+  --ink: #666;
+  --head: #333;
+  --accent: #000;    /* the site's header band */
+  --rule: #e9e9e9;   /* the site's page-header hairline */
+  --paper: #f8f9f9;  /* the site's page-header strip */
+  --muted: #999;
+  --link: #4e8abf;
+  --warn: #d81920;   /* the manual's #ee1d24 IMPORTANT red, darkened to 4.5:1 */
+  --body-font: "Open Sans", Helvetica, Arial, sans-serif;
+  --head-font: "Raleway", Helvetica, Arial, sans-serif;
+}
+
+/* ---- structure: keep as is, restyle below the brand line ---- */
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin-top: 0; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: #fff;
+  font-family: var(--body-font);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+h1, h2, h3, h4, h5, h6 { font-family: var(--head-font); line-height: 1.2; }
+
+main { margin-left: 20vw; padding-bottom: 3em; }
+footer { margin-left: 20vw; padding: 1.6em 3em; }
+
+a { color: var(--link); }
+
+img { max-width: 100%; height: auto; margin-bottom: 0.75em; }
+.topic > img, li > img, figure > img { display: block; }
+figure { margin: 0 0 1em; }
+
+/* NAV */
+#side-nav {
+  position: fixed; top: 0; left: 0;
+  width: 20vw; height: 100%;
+  overflow-y: auto;
+  background: #fff;
+  border-right: 1px solid var(--rule);
+  z-index: 5;
+}
+.nav-container { display: flex; flex-direction: column; margin: 1.5em 1em; }
+#side-nav h4, #side-nav h5 { font-weight: 400; margin-bottom: 0.45em; }
+#side-nav h4 { font-weight: 700; }
+#side-nav h5 { font-size: 0.9em; margin-left: 1em; }
+#side-nav a, #toc-mobile a { color: inherit; text-decoration: none; }
+#side-nav a:hover, #toc-mobile a:hover { text-decoration: underline; }
+
+/* SECTIONS */
+section + section { margin-top: 3em; }
+.flex-container { display: flex; padding-left: 2em; }
+/* A container has no intrinsic width: a half-container sized by its
+   content (width: auto) collapses to 0 unless it sets container-type: normal. */
+.half-container { width: 100%; padding: 0 1em; container-type: inline-size; }
+.half-container > header { column-span: all; }
+.flow > * + * { margin-bottom: 1em; }
+
+/* One .topic per heading carries the columns, so no column runs taller than
+   one topic. 63rem below = the two-column threshold of `columns: 2 30rem`. */
+.topic { columns: 2 30rem; column-gap: 3em; }
+.no-columns { columns: auto !important; }
+/* a heading stands above everything it introduces */
+:not(.topic-group) > .topic > .keep-together:first-child > :is(h3, h4):first-child,
+:not(.topic-group) > .topic > :is(h3, h4):first-child { column-span: all; }
+/* topics the source sets on one page share its columns, each whole in one */
+.topic-group { columns: 2 30rem; column-gap: 3em; }
+.topic-group > .topic { columns: auto; break-inside: avoid; }
+/* the right column's first heading loses its margin at the break; so does the left's */
+.topic-group > .topic:first-child,
+.topic-group > .topic:first-child > :is(h3, h4):first-child,
+.topic-group > .topic:first-child > .keep-together:first-child > :is(h3, h4):first-child { margin-top: 0; }
+
+/* COLUMN BREAKS. A paragraph, list item, figure, table or callout is never
+   cut by the gutter. Chrome's balancer drops `break-after: avoid` when it
+   gets in the way, so it is only a hint: what keeps a heading off a column's
+   foot is a .keep-together holding the heading and its first block. */
+p, li, figure, table, .table-scroll, .keep-together, .callout, .grid-wrapper {
+  break-inside: avoid;
+}
+h2, h3, h4, h5, h6 { break-after: avoid; }
+/* a lead-in ending in ":" stays with what it introduces */
+:has(+ p > .menu-path:only-child) { break-after: avoid; }
+@container (min-width: 63rem) {
+  .column-end { break-after: column; }
+}
+
+/* Figure rows: the max stays indefinite, or auto-fit counts its tracks off
+   it and stacks one figure per row in a narrow column. */
+.grid-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(8em, 100%), 1fr));
+  gap: 1em;
+}
+.grid-wrapper img { width: 100%; }
+
+/* TABLES */
+.table-scroll { overflow-x: auto; margin-bottom: 1em; }
+.doc-table { width: 100%; border-collapse: collapse; font-size: 0.92em; }
+.doc-table th, .doc-table td {
+  padding: 0.4em 0.6em;
+  text-align: left;
+  vertical-align: top;
+  border: 1px solid var(--rule);
+}
+.doc-table thead th { background: var(--accent); color: #fff; }
+
+.callout {
+  background: var(--paper);
+  border-left: 4px solid var(--accent);
+  padding: 0.7em 1em;
+  margin-bottom: 1em;
+}
+.callout > :last-child { margin-bottom: 0; }
+
+@media (max-width: 900px) {
+  .flex-container { flex-direction: column; padding-left: 0; }
+  .half-container { padding: 0 1em; }
+  nav { display: none; }
+  main, footer { margin: 0 auto; }
+  footer { padding: 1.6em 1em; }
+  #toc-mobile { display: block; }
+  /* a diagram with small labels scrolls instead of shrinking */
+  .wide-figure { overflow-x: auto; }
+  .wide-figure img { min-width: 700px; }
+}
+/* 901, not 900: at exactly 900px both queries match and the mobile TOC
+   would vanish together with the nav */
+@media (min-width: 901px) { #toc-mobile { display: none; } }
+
+/* ---- brand: masthead, heading treatment, callouts, from this manual ---- */
+
+/* MASTHEAD: the site's black header band with the white wordmark, then its
+   grey page-header strip carrying the product title */
+#masthead { margin-bottom: 2.5em; }
+#masthead .brand-band { background: var(--accent); padding: 1.6em 3em; }
+#masthead .brand-band img { display: block; width: 180px; margin: 0; }
+#masthead .page-header {
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  padding: 1.8em 0;
+}
+#masthead .flex-container { align-items: center; gap: 2.5em; }
+#masthead h1 {
+  color: var(--head);
+  font-size: 2.2em;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0 0 0.3em;
+}
+.subtitle {
+  font-family: var(--head-font);
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0;
+}
+#masthead .cover-photo-col { flex: 0 0 auto; width: auto; container-type: normal; }
+.cover-photo { display: block; width: 18rem; margin: 0; border: 1px solid var(--rule); }
+
+/* HEADINGS: Raleway 600, dark grey, caps as in the manual */
+h1, h2, h3, h4 { color: var(--head); font-weight: 600; }
+h2 {
+  font-size: 1.6em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.6em;
+}
+h3 { font-size: 1.2em; margin-bottom: 0.5em; }
+#side-nav h4 { font-family: var(--head-font); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.9em; }
+#side-nav h3 { color: var(--head); }
+strong, dt { color: var(--head); }
+
+/* run-in terms of the manual as a definition list */
+.parts-list {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: 2em;
+  margin: 0 0 1em;
+}
+.parts-list > dt, .parts-list > dd { margin: 0; padding: 0.5em 0; border-top: 1px solid var(--rule); }
+.parts-list > dt { font-weight: 700; }
+@container (max-width: 40em) {
+  .parts-list { grid-template-columns: minmax(0, 1fr); }
+  .parts-list > dt { padding-bottom: 0; }
+  .parts-list > dd { border-top: 0; padding-top: 0.1em; }
+}
+
+.callout { border-left-color: var(--rule); }
+.warning {
+  color: var(--warn);
+  font-size: 1.15em;
+  letter-spacing: 0.04em;
+  border-left: 4px solid var(--warn);
+  padding: 0.4em 0 0.4em 1em;
+}
+
+.setup-figure { max-width: min(30em, 100%); }
+.setup-figure img { width: 100%; }
+
+.spec-table { border-collapse: collapse; }
+.spec-table th, .spec-table td {
+  padding: 0.5em 1.5em 0.5em 0;
+  text-align: left;
+  vertical-align: top;
+  border-top: 1px solid var(--rule);
+}
+.spec-table th { color: var(--head); font-weight: 700; white-space: nowrap; }
+
+#toc-mobile ul { list-style: none; padding-left: 0; }
+#toc-mobile li { margin-bottom: 0.4em; }
+
+/* the site's dark footer */
+footer { background: #111; color: #bbb; font-size: 0.85em; }
+footer a { color: #fff; }
+
+@media (max-width: 900px) {
+  #masthead .brand-band { padding: 1.2em 1em; }
+  #masthead .brand-band img { width: 140px; }
+  #masthead .page-header .flex-container { flex-direction: column; align-items: flex-start; gap: 1.2em; }
+  .cover-photo { width: min(18rem, 100%); }
+  .spec-table th { white-space: normal; }
+}
+#toc-mobile li.sub { margin-left: 1em; font-size: 0.9em; }

@@ -282,6 +282,9 @@ Three sources, in order of preference:
    enclosure colour is the accent, the cover's ground is the dark band. Product
    photos usually come out of `raw/` as `.jpg`, so don't glob `*.png` only.
 
+When the source has no visual identity of its own, take the brand's look from
+the maker's website.
+
 Start `style.css` as a copy of `assets/base.css` (`cp`, not retyped): it
 carries the layout, the column-break rules and the breakpoint every page
 needs. Set its tokens — palette, font families, the Google Fonts import —
