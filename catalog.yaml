@@ -1,70 +1,36 @@
-# Devices to convert, sorted by name. `slug` is the page directory and marks
-# the device done; an entry without one is still to do.
-- name: Alesis SR18 Drum Machine
-  slug: alesis-sr18
-- name: BOSS GE-7 Equalizer
-  slug: boss-ge-7
-- name: BOSS NS-1X Noise Suppressor
-  slug: boss-ns-1x
-- name: BOSS Poly Shifter XS-1
-  slug: boss-xs-1
-- name: BOSS RC-5 Loop Station
-  slug: boss-rc-5
-- name: Disaster Area DPC.micro gen3
-  slug: disaster-area-designs-dpc-micro-ns
-- name: ENGL Ravager IR E725
-  slug: engl-ravager-ir
-- name: Focusrite Scarlett 18i16 (4th Gen)
-  slug: focusrite-scarlett-18i16-4th-gen
-- name: Fortin Fuzz
-  slug: fortin-fuzz
-- name: Hotone Soul Press II
-  slug: hotone-soul-press-ii
-- name: Line 6 HX One
-  slug: line6-hx-one
-- name: M-VAVE SMK-37 Elite
-  slug: m-vave-smk-37-elite
-- name: Mooer CAB X2
-  slug: mooer-cab-x2
-- name: MXR Custom Shop Timmy Overdrive
-  slug: mxr-timmy
-- name: MXR Super Badass Dynamic O.D.
-  slug: mxr-super-badass-dynamic-od
-- name: NUX Atlantic
-  slug: nux-atlantic
-- name: NUX NMP-2 Dual Footswitch
-  slug: nux-nmp-2
-- name: Old Blood Noise Endeavors MTET
-  slug: old-blood-noise-endeavors-mtet
-- name: One Control Minimal Series 1 Loop Box
-  slug: one-control-1-loop-box
-- name: Pirate MIDI Bridge4
-  slug: pirate-midi-bridge4
-- name: Pirate MIDI CLiCK v2
-  slug: pirate-midi-click-v2
-- name: Radial ProRMP Reamper
-  slug: radial-prormp
-- name: Source Audio Collider
-  slug: source-audio-collider
-- name: Source Audio EQ2
-  slug: source-audio-eq2
-- name: Source Audio ZIO Bass
-  slug: source-audio-zio-bass
-- name: Source Audio ZIO Boost
-  slug: source-audio-zio-boost
-- name: TC Electronic Plethora X1
-  slug: tc-electronic-plethora-x1
-- name: TC Electronic Polytune 3
-  slug: tc-electronic-polytune-3
-- name: TC Electronic Spark Mini Booster
-  slug: tc-electronic-spark-mini
-- name: Tone City Bad Horse
-  slug: tone-city-bad-horse
-- name: Tone City Matcha Cream
-  slug: tone-city-matcha-cream
-- name: Two Notes Torpedo Captor
-  slug: two-notes-torpedo-captor
-- name: Wampler Mini Ego Compressor
-  slug: wampler-ego-mini
-- name: Wampler Terraform
-  slug: wampler-terraform
+# Devices for the site, sorted by name.
+devices:
+  - Alesis SR18 Drum Machine
+  - BOSS GE-7 Equalizer
+  - BOSS NS-1X Noise Suppressor
+  - BOSS Poly Shifter XS-1
+  - BOSS RC-5 Loop Station
+  - Disaster Area DPC.micro gen3
+  - ENGL Ravager IR E725
+  - Focusrite Scarlett 18i16 (4th Gen)
+  - Fortin Fuzz
+  - Hotone Soul Press II
+  - Line 6 HX One
+  - M-VAVE SMK-37 Elite
+  - Mooer CAB X2
+  - MXR Custom Shop Timmy Overdrive
+  - MXR Super Badass Dynamic O.D.
+  - NUX Atlantic
+  - NUX NMP-2 Dual Footswitch
+  - Old Blood Noise Endeavors MTET
+  - One Control Minimal Series 1 Loop Box
+  - Pirate MIDI Bridge4
+  - Pirate MIDI CLiCK v2
+  - Radial ProRMP Reamper
+  - Source Audio Collider
+  - Source Audio EQ2
+  - Source Audio ZIO Bass
+  - Source Audio ZIO Boost
+  - TC Electronic Plethora X1
+  - TC Electronic Polytune 3
+  - TC Electronic Spark Mini Booster
+  - Tone City Bad Horse
+  - Tone City Matcha Cream
+  - Two Notes Torpedo Captor
+  - Wampler Mini Ego Compressor
+  - Wampler Terraform

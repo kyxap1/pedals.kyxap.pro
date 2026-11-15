@@ -155,8 +155,8 @@ own memory of what you chose. Whatever the earlier job decided is either
 written down beside the page or has to be derived from the PDFs again before
 anything can be called wrong. Establish which before reporting a defect.
 
-- **Pick a device:** check the root `catalog.yaml`. Where entries have no
-  `slug`, take ONE unprocessed device — one session, one device.
+- **Pick a device:** check the root `catalog.yaml`. A device listed there
+  with no card in the root `index.html` is unprocessed; take ONE unprocessed device — one session, one device.
 - **Download official manuals:** find the latest official PDFs for this exact
   model **on the manufacturer's own site**, and take the main manual together
   with *all* the extra documents offered (quick start, MIDI map, addendum,
@@ -504,9 +504,9 @@ hand-tuned and drifts. `type` is the filter category: reuse an existing one
 (e.g. `Drive`, `Time`); a new value adds its own filter chip. `note` is a short
 descriptor of what the pedal is, e.g. `Compressor`.
 
-Then mark the pedal done in the root `catalog.yaml`, the list of pedals to
-convert: add `slug: <slug>` under its `name`. Edit the pedal's existing entry
-rather than adding one; a pedal not listed gets a new entry in name order.
+The root `catalog.yaml` is the owner's list of devices and carries no
+status. If the pedal isn't in its `devices` list yet, add it in name order;
+otherwise leave the file alone.
 
 ### 7. Verify before declaring done
 

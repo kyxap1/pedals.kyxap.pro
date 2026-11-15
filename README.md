@@ -4,10 +4,10 @@ PDF manuals, rebuilt by AI: an agentic Claude Code pipeline converts guitar gear
 
 ## Add a manual
 
-1. Add the device to `catalog.yaml` as `- name: <Brand> <Model>`.
+1. Add the device to the `devices` list in `catalog.yaml`.
 2. Ask the AI agent to process it.
 
-The agent downloads the official PDFs, builds the HTML page, adds it to `index.html`, and adds the page's `slug` to the entry in `catalog.yaml`.
+The agent downloads the official PDFs, builds the HTML page, adds it to `index.html`,
 
 ## MCP
 
