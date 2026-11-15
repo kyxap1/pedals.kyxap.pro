@@ -54,6 +54,7 @@ for this model, no other documents. The page covers the English part only: PDF p
 | FCC | This equipment generates uses and can radiate | generates, uses and can radiate |
 | FCC | ‐‐ items | list with "-- " markers |
 | FCC | (1)This / (2)This | (1) This / (2) This |
+| Every section | Headings set as run-ins end in ":" (ARP:, Globe Menu:, Entering the Sequencer:, FAQ questions …) | colon dropped: on the page the heading stands on its own line |
 
 ## Conflicts left as printed
 
