@@ -69,6 +69,30 @@ def edge_ink(mask, box):
     return out
 
 
+def edge_depth_ink(mask, box, name):
+    """Ink fraction of a band reaching in from one edge: a photo or panel stays wet
+    deep inside, a frame line hugging the edge does not."""
+    x0, y0, x1, y1 = box
+    d = max(4, round(0.05 * ((y1 - y0) if name in ("top", "bottom") else (x1 - x0))))
+    band = {"top": (x0, y0, x1, y0 + d), "bottom": (x0, y1 - d, x1, y1),
+            "left": (x0, y0, x0 + d, y1), "right": (x1 - d, y0, x1, y1)}[name]
+    b = mask.crop(band)
+    return sum(b.point(lambda v: 1 if v else 0, "L").getdata()) / (b.size[0] * b.size[1])
+
+
+def thin_margins(mask):
+    """Sides whose ink-free margin is under half the median: a frame or dashed rule
+    cut away whole leaves no ink on the edge, only a lopsided margin."""
+    w, h = mask.size
+    bb = mask.getbbox()
+    if bb is None:
+        return {}
+    m = {"left": bb[0], "top": bb[1], "right": w - bb[2], "bottom": h - bb[3]}
+    med = sorted(m.values())[1:3]
+    med = sum(med) / 2
+    return {k: v for k, v in m.items() if med >= 6 and v < med / 2}
+
+
 def cut_edges(mask, box):
     """Which of the box's own border lines carry ink, i.e. where a stroke runs off."""
     return {k: v > 0 for k, v in edge_ink(mask, box).items()}
@@ -140,6 +164,20 @@ def selftest():
     rgba = Image.new("RGBA", (60, 60), (0, 0, 0, 0))        # transparent ground
     rgba.paste((0, 0, 0, 255), (10, 10, 50, 50))
     assert not any(cut_edges(ink_mask(rgba, 40), (0, 0, 60, 60)).values()), "alpha must read as ground"
+
+    framed = Image.new("RGB", (100, 100), "white")          # box frame, bottom line on the edge
+    framed.paste((0, 0, 0), (10, 10, 90, 12))
+    framed.paste((0, 0, 0), (10, 10, 12, 100)); framed.paste((0, 0, 0), (88, 10, 90, 100))
+    framed.paste((0, 0, 0), (0, 98, 100, 100))               # rule spanning the full edge
+    fm = ink_mask(framed, 40)
+    assert edge_depth_ink(fm, (0, 0, 100, 100), "bottom") < BLEED, "a rule is a cut, not a bleed"
+    panel = Image.new("RGB", (100, 100), "white")           # a filled panel reaching the edge
+    panel.paste((0, 0, 0), (0, 60, 100, 100))
+    assert edge_depth_ink(ink_mask(panel, 40), (0, 0, 100, 100), "bottom") >= BLEED
+
+    lop = Image.new("RGB", (100, 100), "white")             # 12px margins, top only 2px
+    lop.paste((0, 0, 0), (12, 2, 88, 4)); lop.paste((0, 0, 0), (12, 86, 88, 88))
+    assert set(thin_margins(ink_mask(lop, 40))) == {"top"}
     print("self-test ok")
 
 
@@ -153,16 +191,24 @@ def main(argv):
         # transparent ground into black ink
         im = im.convert("RGBA") if im.mode in ("P", "LA", "RGBA") else im.convert("RGB")
         w, h = im.size
-        frac = edge_ink(ink_mask(im, tol), (0, 0, w, h))
+        mask = ink_mask(im, tol)
+        frac = edge_ink(mask, (0, 0, w, h))
         # a stroke running off the edge wets a few percent of that line; a photo or a
-        # panel that fills the frame wets all of it and was never a cut
+        # panel that fills the frame wets all of it and was never a cut, but a frame
+        # line lying along the edge wets all of it too and is one
         cut = [f"{e} ({frac[e]:.0%})" for e in frac if 0 < frac[e] < BLEED]
-        bleed = [e for e in frac if frac[e] >= BLEED]
+        rule = [e for e in frac if frac[e] >= BLEED and edge_depth_ink(mask, (0, 0, w, h), e) < BLEED]
+        cut += [f"{e} (a frame line along the edge)" for e in rule]
+        bleed = [e for e in frac if frac[e] >= BLEED and e not in rule]
         if cut:
             print(f"cut: ink runs off {', '.join(cut)} — the crop is missing part of the drawing")
         if bleed:
             print(f"full-bleed edges (a photo or a filled panel, not a cut): {', '.join(bleed)}")
-        if not cut and not bleed:
+        thin = thin_margins(mask)
+        if thin:
+            print("thin margin: " + ", ".join(f"{k} {v}px" for k, v in thin.items())
+                  + " against the others — a frame or dashed rule may be cut away whole; look at it")
+        if not cut and not bleed and not thin:
             print("clear: no ink on any edge")
         return 1 if cut else 0
     page, out = argv[0], argv[1]

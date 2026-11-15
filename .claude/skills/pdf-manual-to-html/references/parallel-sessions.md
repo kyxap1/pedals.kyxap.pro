@@ -4,7 +4,7 @@ Several sessions may convert different manuals in this checkout at once, so a
 job touches only what its own slug keys — `<slug>/` and `_cctmp.<slug>/` — and
 treats everything else in `git status` as a sibling's work in progress.
 
-Four things are shared anyway: the root `index.html`, `catalog.txt`, this
+Four things are shared anyway: the root `index.html`, `catalog.yaml`, this
 skill's `SKILL.md` and `references/`.
 
 ## Editing a shared file
@@ -21,7 +21,7 @@ skill's `SKILL.md` and `references/`.
   staged stays out:
 
   ```
-  git add <slug>/ && git commit -m "…" -- <slug>/ index.html catalog.txt
+  git add <slug>/ && git commit -m "…" -- <slug>/ index.html catalog.yaml
   ```
 
   Never `git add -A`, `git add .`, `git commit -a`, `git stash`.

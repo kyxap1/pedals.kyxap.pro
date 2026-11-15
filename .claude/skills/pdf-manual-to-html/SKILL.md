@@ -62,7 +62,7 @@ exception is your own slug: `<slug>/` or `_cctmp.<slug>/` already present,
 uncommitted and not created in this conversation means another session is on
 the same pedal — stop and ask the user.
 
-The shared files — root `index.html`, `catalog.txt`, this skill's `SKILL.md`
+The shared files — root `index.html`, `catalog.yaml`, this skill's `SKILL.md`
 and `references/` — take concurrent edits, and a commit has to keep a
 sibling's work out of it. `references/parallel-sessions.md` has both rules;
 read it before editing a shared file and before any git command.
@@ -155,9 +155,8 @@ own memory of what you chose. Whatever the earlier job decided is either
 written down beside the page or has to be derived from the PDFs again before
 anything can be called wrong. Establish which before reporting a defect.
 
-- **Pick a device:** check the root `catalog.txt`. Where devices are listed
-  without a leading `+ `, take ONE unprocessed device — one session, one
-  device.
+- **Pick a device:** check the root `catalog.yaml`. Where entries have no
+  `slug`, take ONE unprocessed device — one session, one device.
 - **Download official manuals:** find the latest official PDFs for this exact
   model **on the manufacturer's own site**, and take the main manual together
   with *all* the extra documents offered (quick start, MIDI map, addendum,
@@ -436,6 +435,12 @@ section it illustrates.
   strokes and are not a failure. An image shipped from `raw/` uncropped
   carries the maker's own frame: `cut` there means the source frames its
   subject tight, and the fix, if any, is padding, not a new crop.
+  Two cuts leave no stroke ending on the edge, and it names both: a frame
+  line lying along the edge (`a frame line along the edge` — the QR frames
+  on the M-VAVE page lost their bottom rule this way), and a `thin margin`,
+  a side padded far less than the others because a dashed box or rule was
+  cut away whole. A thin margin is a warning: look at that side against
+  the render; text sitting close above the figure is a fair reason.
 - **Nothing that reads as text ships as pixels.** A table printed as a
   screenshot is transcribed into a real `<table>` (conventions → "Reference
   tables"): a reader can't scan or search a flat picture, and it goes
@@ -443,6 +448,13 @@ section it illustrates.
   and is painted out of the image with the background colour; integral labels
   (numbered pointers) stay. No exceptions for row or column count —
   logotypes are the only figures allowed to carry text.
+- A display mockup transcribed this way is checked against its print by
+  eye, in one sheet beside the crop, not only by its strings: colour of the
+  title and each value, the title inside or above the frame, pager arrows,
+  and any drawing inside it. What isn't text — the lit keys on a scale or
+  chord screen — is cropped and set inside the table, with an alt naming
+  what it shows. A strings-only check passed the M-VAVE screens with both
+  key strips missing and a red title printed grey.
 - Copy across only the images the page shows, named for what they depict
   (`setting-1.png`, `ego-mini-header.jpg`). Most of the dump is print
   furniture — gradient strips a few pixels tall, slivers of rules, repeated
@@ -492,9 +504,9 @@ hand-tuned and drifts. `type` is the filter category: reuse an existing one
 (e.g. `Drive`, `Time`); a new value adds its own filter chip. `note` is a short
 descriptor of what the pedal is, e.g. `Compressor`.
 
-Then mark the pedal in the root `catalog.txt`, the list of pedals to convert:
-a leading `+ ` flags a line as done. Edit the pedal's existing line rather
-than adding one.
+Then mark the pedal done in the root `catalog.yaml`, the list of pedals to
+convert: add `slug: <slug>` under its `name`. Edit the pedal's existing entry
+rather than adding one; a pedal not listed gets a new entry in name order.
 
 ### 7. Verify before declaring done
 
@@ -676,7 +688,7 @@ gets missed.
   pedal, page references turned into anchor links — plus the conflicts
   between sources left as printed. Nothing listed means verbatim.
 - **Files** — the pedal directory and what moved into it, the catalog card,
-  `catalog.txt`, scratch deleted, commit status.
+  `catalog.yaml`, scratch deleted, commit status.
 
 Once they accept it, look back at what this job actually taught you: a
 masthead proportion worth measuring rather than eyeballing, a same-brand quirk,
