@@ -1,0 +1,283 @@
+/* Fonts: every word but the URL is outlined; the one embedded face,
+   HelveticaNeueLTPro-Cn 400, sets body copy. Judged by eye off the renders:
+   Helvetica Neue Condensed 400 (body) -> Roboto Condensed 400
+   Helvetica Neue Medium Condensed (titles, sub-heads) -> Roboto Condensed 500
+   Helvetica Neue Bold Condensed (NOTE:, WARNING:, LOOP CORE DELUXE) -> Roboto Condensed 700
+   Cover "Owner's Manual" is Helvetica regular -> Arial/Helvetica 400 */
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,400;0,500;0,700;1,400;1,700&display=swap");
+
+:root {
+  --ink: #1a1a1a;    /* body text */
+  --accent: #231f20; /* the cover's black strip: masthead, safety banner, rules */
+  --rule: #c9c9c9;   /* hairlines */
+  --paper: #f1f1f1;  /* tint behind callouts */
+  --muted: #5e5e5e;
+  --link: #231f20;
+  --body-font: "Roboto Condensed", "Arial Narrow", sans-serif;
+  --head-font: var(--body-font);
+}
+
+/* ---- structure: keep as is, restyle below the brand line ---- */
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin-top: 0; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: #fff;
+  font-family: var(--body-font);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+h1, h2, h3, h4, h5, h6 { font-family: var(--head-font); line-height: 1.2; }
+
+main { margin-left: 20vw; padding-bottom: 3em; }
+footer { margin-left: 20vw; padding: 1.6em 3em; }
+
+a { color: var(--link); }
+
+img { max-width: 100%; height: auto; margin-bottom: 0.75em; }
+.topic > img, li > img, figure > img { display: block; }
+figure { margin: 0 0 1em; }
+
+/* NAV */
+#side-nav {
+  position: fixed; top: 0; left: 0;
+  width: 20vw; height: 100%;
+  overflow-y: auto;
+  background: #fff;
+  border-right: 1px solid var(--rule);
+  z-index: 5;
+}
+.nav-container { display: flex; flex-direction: column; margin: 1.5em 1em; }
+#side-nav h4, #side-nav h5 { font-weight: 400; margin-bottom: 0.45em; }
+#side-nav h4 { font-weight: 700; }
+#side-nav h5 { font-size: 0.9em; margin-left: 1em; }
+#side-nav a, #toc-mobile a { color: inherit; text-decoration: none; }
+#side-nav a:hover, #toc-mobile a:hover { text-decoration: underline; }
+
+/* SECTIONS */
+section + section { margin-top: 3em; }
+.flex-container { display: flex; padding-left: 2em; }
+/* A container has no intrinsic width: a half-container sized by its
+   content (width: auto) collapses to 0 unless it sets container-type: normal. */
+.half-container { width: 100%; padding: 0 1em; container-type: inline-size; }
+.half-container > header { column-span: all; }
+.flow > * + * { margin-bottom: 1em; }
+
+/* One .topic per heading carries the columns, so no column runs taller than
+   one topic. 63rem below = the two-column threshold of `columns: 2 30rem`. */
+.topic { columns: 2 30rem; column-gap: 3em; }
+.no-columns { columns: auto !important; }
+/* a heading stands above everything it introduces. column-span needs a
+   block-level box: a pill heading takes width: fit-content, never inline-block */
+:not(.topic-group) > .topic > .keep-together:first-child > :is(h3, h4):first-child,
+:not(.topic-group) > .topic > :is(h3, h4):first-child { column-span: all; }
+/* topics the source sets on one page share its columns, each whole in one */
+.topic-group { columns: 2 30rem; column-gap: 3em; }
+.topic-group > .topic { columns: auto; break-inside: avoid; }
+/* the right column's first heading loses its margin at the break; so does the left's */
+.topic-group > .topic:first-child,
+.topic-group > .topic:first-child > :is(h3, h4):first-child,
+.topic-group > .topic:first-child > .keep-together:first-child > :is(h3, h4):first-child { margin-top: 0; }
+
+/* COLUMN BREAKS. A paragraph, list item, figure, table or callout is never
+   cut by the gutter. Chrome's balancer drops `break-after: avoid` when it
+   gets in the way, so it is only a hint: what keeps a heading off a column's
+   foot is a .keep-together holding the heading and its first block. */
+p, li, figure, table, .table-scroll, .keep-together, .callout, .grid-wrapper {
+  break-inside: avoid;
+}
+h2, h3, h4, h5, h6 { break-after: avoid; }
+/* a lead-in ending in ":" stays with what it introduces */
+:has(+ p > .menu-path:only-child) { break-after: avoid; }
+@container (min-width: 63rem) {
+  .column-end { break-after: column; }
+}
+
+/* Figure rows: the max stays indefinite, or auto-fit counts its tracks off
+   it and stacks one figure per row in a narrow column. */
+.grid-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(8em, 100%), 1fr));
+  gap: 1em;
+}
+.grid-wrapper img { width: 100%; }
+
+/* TABLES */
+.table-scroll { overflow-x: auto; margin-bottom: 1em; }
+.doc-table { width: 100%; border-collapse: collapse; font-size: 0.92em; }
+.doc-table th, .doc-table td {
+  padding: 0.4em 0.6em;
+  text-align: left;
+  vertical-align: top;
+  border: 1px solid var(--rule);
+}
+.doc-table thead th { background: var(--accent); color: #fff; }
+
+.callout {
+  background: var(--paper);
+  border-left: 4px solid var(--accent);
+  padding: 0.7em 1em;
+  margin-bottom: 1em;
+}
+.callout > :last-child { margin-bottom: 0; }
+
+@media (max-width: 900px) {
+  .flex-container { flex-direction: column; padding-left: 0; }
+  .half-container { padding: 0 1em; }
+  nav { display: none; }
+  main, footer { margin: 0 auto; }
+  footer { padding: 1.6em 1em; }
+  #toc-mobile { display: block; }
+  /* a diagram with small labels scrolls instead of shrinking */
+  .wide-figure { overflow-x: auto; }
+  .wide-figure img { min-width: 700px; }
+}
+/* 901, not 900: at exactly 900px both queries match and the mobile TOC
+   would vanish together with the nav */
+@media (min-width: 901px) { #toc-mobile { display: none; } }
+
+/* ---- brand: masthead, heading treatment, callouts, from this manual ---- */
+
+a { text-decoration-color: #9a9a9a; text-underline-offset: 0.15em; }
+
+/* MASTHEAD: the cover's black strip with the NUX logo beside the white
+   product panel; the strip is 30% of the cover's width */
+#masthead { display: flex; flex-wrap: wrap; min-height: 18em; }
+#masthead .brand-panel {
+  flex: 0 1 30%;
+  min-width: 12em;
+  background: var(--accent);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 4.5em 2em 2em;
+}
+#masthead .brand-panel img { width: min(70%, 11em); margin: 0; }
+#masthead .product-panel {
+  flex: 1 1 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  padding: 2em 3em;
+}
+#masthead .photo { width: min(22em, 100%); margin: 0 auto 1em; }
+#masthead h1 { margin: 0; }
+#masthead h1 img { width: min(15em, 100%); margin: 0; }
+#masthead .doc-type {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.6em;
+  margin: 0.1em 0 0;
+}
+
+/* HEADINGS: bold condensed title over a hairline running the page width */
+.flow h2 {
+  font-size: 2.1em;
+  font-weight: 500;
+  border-bottom: 3px solid var(--ink);
+  padding-bottom: 0.15em;
+  margin: 1.5em 0 1em;
+}
+.flow h3 { font-size: 1.45em; font-weight: 700; margin: 1.4em 0 0.4em; }
+.flow h4 { font-size: 1.35em; font-weight: 700; margin: 1.2em 0 0.3em; }
+.flow h5 { font-size: 0.85em; font-weight: 700; margin: 0.6em 0 0.2em; }
+.topic.level-3 { margin-top: 1em; }
+.run-in { font-size: 0.85em; }
+
+/* SAFETY: reversed-out banner and ruled boxes, as printed */
+.banner {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  text-align: center;
+  padding: 0.4em 1em;
+  column-span: all;
+}
+.boxed { border: 1px solid var(--ink); padding: 0.4em 0.7em; font-size: 0.92em; }
+.icon-note { display: flex; gap: 0.8em; align-items: flex-start; }
+.icon-note .icon { width: 2.6em; flex: 0 0 auto; margin: 0.15em 0 0; }
+.closing { text-align: center; }
+.small { font-size: 0.85em; color: var(--muted); }
+
+ul.dots { padding-left: 1.2em; list-style: disc; }
+.seg-list { list-style: none; padding-left: 0.5em; }
+
+/* 7-segment display readouts, italic and spaced like the manual's LED face */
+.seg { font-weight: 700; font-style: italic; letter-spacing: 0.12em; white-space: nowrap; }
+
+.note strong:first-child, .note h5 { font-weight: 700; }
+
+/* PRODUCT INTERFACE: sticky diagram beside the part cards, wide enough
+   to keep its printed callout labels legible */
+.panel-layout {
+  display: grid;
+  grid-template-columns: minmax(16em, 30em) 1fr;
+  gap: 2.5em;
+  align-items: start;
+}
+.panel-layout > figure { position: sticky; top: 1em; }
+.panel-layout img { width: 100%; }
+.cards { columns: 2 16rem; column-gap: 2.5em; }
+.card { break-inside: avoid; margin-bottom: 1em; }
+.card h3 { margin-top: 0; font-size: 1.05em; }
+.card h4 { font-size: 0.85em; margin: 0.4em 0 0.1em; }
+.card p { margin-bottom: 0.4em; }
+
+/* figures sit in their column at their own scale */
+.flow figure img, .topic > img { width: 100%; }
+
+/* RHYTHM LISTS: the two beat tables side by side, ruled grid as printed */
+.beat-lists {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2em;
+  align-items: flex-start;
+  break-inside: avoid;
+}
+.beat-lists .doc-table { width: auto; min-width: 14em; flex: 0 1 18em; }
+.doc-table th, .doc-table td { border-color: var(--ink); padding: 0.05em 0.8em; line-height: 1.35; }
+.doc-table td:first-child { text-align: center; width: 3.5em; }
+.doc-table thead th { background: none; color: var(--ink); font-weight: 400; }
+
+footer { border-top: 1px solid var(--rule); font-size: 0.9em; }
+footer .compliance { width: 16em; display: block; }
+
+@media (max-width: 900px) {
+  #masthead { flex-direction: column; }
+  #masthead .brand-panel { flex-basis: auto; padding: 1.5em; align-items: center; }
+  #masthead .product-panel { align-items: center; text-align: center; padding: 1.5em 1em; }
+  .panel-layout { grid-template-columns: 1fr; }
+  .panel-layout > figure { position: static; max-width: 26em; margin: 0 auto; }
+}
+.topic > img.capped { max-width: min(36em, 100%); }
+
+.flow p, .flow li { line-height: 1.45; }
+.banner, .closing { text-align: center; }
+.seg-list { break-inside: avoid; }
+.card h3 { font-size: 1.15em; }
+.flow #copyright, .flow #accuracy { font-size: 1em; font-weight: 700; margin-top: 0; }
+/* battery: text beside the drawing, as printed */
+.split { display: grid; grid-template-columns: 1fr minmax(0, 1fr); gap: 3em; align-items: start; }
+.split-fig { width: 100%; max-width: 22em; }
+.flow figure.capped { max-width: min(32em, 100%); }
+@media (max-width: 900px) { .split { grid-template-columns: 1fr; gap: 1em; } }
+/* Operation: each numbered topic stands whole in one column, as printed */
+.topic-group > .topic + .topic { margin-top: 2.4em; }
+.topic-group > .topic > :is(h3, h4):first-child,
+.topic-group > .topic > .keep-together:first-child > :is(h3, h4):first-child { margin-top: 0; }
+#side-nav { font-size: 1.2em; }
+/* step numbers hang in the margin so a run of steps scans by number */
+.flow p.step { padding-left: 2.8em; text-indent: -2.8em; }
+.step-no { display: inline-block; width: 2.8em; text-indent: 0; font-weight: 700; }
+/* notes and warnings sit apart from the steps they qualify */
+.flow .note { border: 1px solid var(--rule); border-left: 3px solid var(--ink); padding: 0.5em 0.9em; break-inside: avoid; }
+.note.warn strong { display: block; margin-bottom: 0.3em; }
+.note.warn ol { margin: 0; padding-left: 1.4em; }
+.note.warn li:last-child { margin-bottom: 0; }
+.flow .note { margin-bottom: 1em; }
+.flow .note > :last-child { margin-bottom: 0; }
+/* readouts listed under a step line up with the step's text */
+.flow .step + .seg-list { padding-left: 2.8em; }
