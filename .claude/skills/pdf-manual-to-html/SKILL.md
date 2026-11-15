@@ -544,8 +544,9 @@ tools — `check_columns.mjs` and `crop_figure.py --check` answer in words —
 and re-shoot only at the width a finding named. The screenshot pass for the
 reviewer runs once, when the page is ready.
 
-`figure`, `lead-in`, `orphan`, `split` and `overflow` from `check_columns.mjs`
-are defects every reader at that width sees — a heading at a column's foot, a
+`figure`, `lead-in`, `orphan`, `unspanned`, `split` and `overflow` from
+`check_columns.mjs` are defects every reader at that width sees — a heading at
+a column's foot, a heading sunk into the left column beside its own text, a
 sentence cut by the gutter — so the page ships with none of them between 1200
 and 2000 px. `unbalanced`, a finding only at the sweep's edges, a badge whose
 round edge reads as 1% wet: note it in the report and move on. Most column
@@ -566,13 +567,14 @@ findings share one cause (a heading outside its `.keep-together`, a missing
   ```
 - `scripts/check_columns.mjs "file://$PWD/<pedal-dir>/index.html"` sweeps
   1000–2600 px — one screenshot width proves nothing about breaks that move
-  with the viewport — and names six failures with the widths they happen at:
+  with the viewport — and names seven failures with the widths they happen at:
 
   | kind | what it found | fix |
   |---|---|---|
   | `figure` | a figure starting the right column while its lead-in stays left | `.keep-together` around lead-in + figure + follow-up |
   | `lead-in` | a block ending in ":" split from its list or menu path | the `:has()` rule, or `.keep-together` |
   | `orphan` | a sub-heading left at a column's foot, its content in the next | `.keep-together` around the heading and its first block; `break-after: avoid` alone doesn't hold |
+  | `unspanned` | a heading meant to span both columns sitting in the left one, its section's text level with it in the right | the heading's `display` is not block-level (`inline-block`, `inline-flex`, a float), or a selector outranks the span; a pill or tag keeps `display: block` with `width: fit-content` |
   | `split` | a paragraph or list item cut across the gutter | `break-inside: avoid` on it (in `base.css`); a paragraph taller than a column is split by hand at a sentence |
   | `unbalanced` | one column ending far above the other | usually a tall figure or an over-wide `.keep-together`; conventions → "Sizing the measure" |
   | `overflow` | an unbreakable string pushing its block past the column | `overflow-wrap: anywhere` on that block |
@@ -720,8 +722,9 @@ Actions on push to `master`; source PDFs live in the repo on purpose.
   `height` and `loading="lazy"` on every `<img>`.
 - `scripts/check_page.py` — anchor, image and stray-file check on the built page.
 - `scripts/check_copy.py` — page text the source PDFs don't contain.
-- `scripts/check_columns.mjs` — orphaned headings, split paragraphs, figures
-  and `:` lead-ins parted from their text, swept over viewport widths.
+- `scripts/check_columns.mjs` — orphaned and unspanned headings, split
+  paragraphs, figures and `:` lead-ins parted from their text, swept over
+  viewport widths.
 - `scripts/clean_crop.py` — an icon crop stripped of neighbouring letters and
   rule ends.
 - `scripts/crop_figure.py` — a rough box grown into a crop that cuts nothing,

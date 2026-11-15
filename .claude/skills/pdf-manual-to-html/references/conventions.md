@@ -225,13 +225,21 @@ and let the figure sit in its column.
   paragraph at a capped width (`max-width: min(44em, 100%)`), or pull the next
   block up into the same topic so the second column has something to fill
   with. `check_columns.mjs` reports it as `unbalanced`.
+- `column-span` applies to block-level boxes only. A heading the brand layer
+  turns into a pill or tag keeps `display: block` and takes `width:
+  fit-content`; `inline-block`, `inline-flex` or a float drops it into the
+  left column beside its own text, with no warning from the browser. A
+  heading that should stay in its column (FAQ questions set side by side)
+  gets `column-span: none` on a selector at least as specific as the one in
+  `base.css`, not a `display` that happens to defeat the span.
 
 
 Column breaks move with every viewport width, so one screenshot proves
 nothing about them: `scripts/check_columns.mjs` sweeps 1000–2600 px and
 reports, with the widths where each happens, a figure stranded from its
 lead-in (`figure`), a `:` lead-in split from what it introduces (`lead-in`),
-a sub-heading left at a column's foot (`orphan`), a column ending far above
+a sub-heading left at a column's foot (`orphan`), a spanning heading sunk
+into the left column (`unspanned`), a column ending far above
 the other (`unbalanced`) and an unbreakable string pushing past its column
 (`overflow`).
 

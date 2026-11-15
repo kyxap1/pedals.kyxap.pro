@@ -65,7 +65,8 @@ section + section { margin-top: 3em; }
    one topic. 63rem below = the two-column threshold of `columns: 2 30rem`. */
 .topic { columns: 2 30rem; column-gap: 3em; }
 .no-columns { columns: auto !important; }
-/* a heading stands above everything it introduces */
+/* a heading stands above everything it introduces. column-span needs a
+   block-level box: a pill heading takes width: fit-content, never inline-block */
 :not(.topic-group) > .topic > .keep-together:first-child > :is(h3, h4):first-child,
 :not(.topic-group) > .topic > :is(h3, h4):first-child { column-span: all; }
 /* topics the source sets on one page share its columns, each whole in one */

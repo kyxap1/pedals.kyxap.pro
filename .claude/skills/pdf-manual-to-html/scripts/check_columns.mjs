@@ -11,6 +11,10 @@
 //                (list, menu path, figure) in the other;
 //   orphan     — a sub-heading left at the foot of a column with its content in
 //                the next one (a `break-after: avoid` the balancer ignored);
+//   unspanned  — a heading the stylesheet spans (`column-span: all`) with its
+//                topic's content starting in the right column level with it
+//                or higher: the span did not apply (an inline-level display,
+//                a float, a selector that outranks it);
 //   unbalanced — a topic taller than a screen whose right column stays nearly
 //                empty: an indivisible `.keep-together` jumped across whole;
 //   overflow   — an unbreakable string (a bare URL, a long token) pushing its
@@ -89,6 +93,19 @@ const probe = `(() => {
       if (b.clientWidth > 0 && b.scrollWidth > b.clientWidth + 2)
         out.push({ kind: 'overflow', text: label(b) });
     });
+    // computed column-span stays 'all' even where it does not apply, so it
+    // names the headings meant to span; the layout says whether they do
+    for (const h of c.querySelectorAll('.topic h3, .topic h4')) {
+      if (getComputedStyle(h).columnSpan !== 'all' || !h.getBoundingClientRect().height) continue;
+      const t = h.closest('.topic');
+      const tr = t.getBoundingClientRect();
+      const hb = h.getBoundingClientRect().bottom;
+      const beside = [...t.querySelectorAll('p, li, img, table, h3, h4, h5, h6')].some((e) => {
+        const r = e.getBoundingClientRect();
+        return e !== h && r.height > 0 && r.top < hb && r.left + 5 >= tr.left + tr.width / 2;
+      });
+      if (beside) out.push({ kind: 'unspanned', text: label(h) });
+    }
     // whatever actually carries the columns: the .topic wrappers on a page that
     // uses them, else the container itself
     const boxes = [c, ...c.querySelectorAll('.topic')].filter((el) => {
