@@ -1,21 +1,35 @@
-/* Fonts: HarmonyOS Sans SC Regular 400 -> Inter 400 (body); HarmonyOS Sans SC Bold 700 -> Inter 700 (headings, run-ins);
-   OPPOSans-M 500 -> Inter 500 (connection card); OPPOSans-H 900 -> Inter 900 (model name); Inter oblique (display mockups) */
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,700;0,900;1,700&display=swap");
+/* Style: m-vave.com (Orbitron display, Space Grotesk headings, DM Sans body, violet palette).
+   Weights from the manual: HarmonyOS Sans SC Regular 400 -> DM Sans 400 (body); HarmonyOS Sans SC Bold 700
+   -> DM Sans / Space Grotesk 700 (headings, run-ins); OPPOSans-M 500 -> DM Sans 500 (connection card);
+   OPPOSans-H 900 -> Orbitron 700 (model name). Inter bold oblique sets the transcribed device display only. */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Orbitron:wght@700&family=Space+Grotesk:wght@700&family=Inter:ital,wght@1,700&display=swap");
 
 :root {
-  --ink: #231f20;    /* body text */
-  --accent: #0e0f0e; /* the cover's ground: masthead, banners, table heads */
-  --rule: #c9c9c9;   /* hairlines */
-  --paper: #f1f1f1;  /* tint behind callouts */
-  --band: #bdbcbc;   /* grey band behind function headings */
-  --orange: #c95128; /* key and knob colour of the enclosure */
+  --ink: #2a2638;        /* body text */
+  --ink-strong: #07060d; /* the site's --bg-primary, as heading ink */
+  --accent: #12101f;     /* the site's --bg-card */
+  --card-dark: #12101f;
+  --rule: #e4e1ec;
+  --paper: #f6f4fb;
+  --purple: #7c3aed;
+  --purple-dark: #6d28d9;
+  --purple-light: #a78bfa;
+  --cyan: #06d6e0;
+  --on-dark: #f0edf6;
+  --glow-purple: rgba(124, 58, 237, 0.35);
+  --border-glow: rgba(124, 58, 237, 0.3);
+  --hero-1: #15141c; --hero-2: #1e1c2a; --hero-3: #22202f; --hero-4: #18162a;
+  --radius-sm: 8px;
+  /* device display: the manual's own colours, not the site's */
+  --screen-frame: #231f20;
   --screen-title: #656263;
   --screen-value: #943743;
   --screen-hl: #e6a92d;
-  --muted: #5e5e5e;
-  --link: #0a58ca;
-  --body-font: "Inter", system-ui, sans-serif;
-  --head-font: var(--body-font);
+  --muted: #5f5874;
+  --link: var(--purple);
+  --body-font: "DM Sans", system-ui, sans-serif;
+  --head-font: "Space Grotesk", var(--body-font);
+  --display-font: "Orbitron", var(--head-font);
 }
 
 /* ---- structure: keep as is, restyle below the brand line ---- */
@@ -139,99 +153,174 @@ h2, h3, h4, h5, h6 { break-after: avoid; }
    would vanish together with the nav */
 @media (min-width: 901px) { #toc-mobile { display: none; } }
 
-/* ---- brand: masthead, heading treatment, callouts, from this manual ---- */
+/* ---- brand: m-vave.com design language (deep violet ground, purple/cyan accents,
+   Orbitron display, Space Grotesk headings, DM Sans body, pill tags, rounded cards) ---- */
 
-/* MASTHEAD: black band with the wordmark tab, then the title beside the photo */
-#masthead .band { background: var(--accent); padding: 1em 2em; }
+/* MASTHEAD: the site's hero gradient carries wordmark, model name and photo */
+#masthead {
+  background: linear-gradient(135deg, var(--hero-1) 0%, var(--hero-2) 40%, var(--hero-3) 70%, var(--hero-4) 100%);
+  color: var(--on-dark);
+  border-bottom: 1px solid var(--border-glow);
+}
+#masthead .band { padding: 1.6em 3em 0.6em; }
 #masthead h1 { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5em 1.5em; margin: 0; }
-#masthead h1 img { width: min(16rem, 50%); margin: 0; }
-#masthead h1 span { color: #fff; font-weight: 900; font-size: clamp(1.6rem, 4vw, 2.6rem); }
+/* the wordmark PNG carries a black ground; lighten drops it into the gradient */
+#masthead h1 img { width: min(14rem, 50%); margin: 0; mix-blend-mode: lighten; }
+#masthead h1 span {
+  font-family: var(--display-font); font-weight: 700; letter-spacing: 3px;
+  font-size: clamp(1.5rem, 4vw, 2.6rem);
+  background: linear-gradient(135deg, var(--on-dark), var(--purple-light));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 #masthead .cover {
   display: flex; align-items: center; gap: 2em; flex-wrap: wrap;
-  padding: 1.5em 3em 0;
+  padding: 1em 3em 2em;
 }
-#masthead .doc-title { font-weight: 700; font-size: 1.6rem; text-transform: uppercase; margin: 0; }
-#masthead .cover-photo { flex: 1 1 18rem; min-width: 0; max-width: 46rem; margin: 0 auto; }
-@media (max-width: 900px) { #masthead .cover { padding: 1em 1em 0; } #masthead .band { padding: 1em; } }
+/* the site's section tag: cyan pill, spaced caps */
+#masthead .doc-title {
+  display: inline-block; margin: 0;
+  padding: 6px 18px; border-radius: 100px;
+  background: rgba(6, 214, 224, 0.08); border: 1px solid rgba(6, 214, 224, 0.25);
+  color: var(--cyan); font-weight: 700; font-size: 0.85rem;
+  letter-spacing: 2px; text-transform: uppercase;
+}
+#masthead .cover-photo {
+  flex: 1 1 18rem; min-width: 0; max-width: 46rem; margin: 0 auto;
+  filter: drop-shadow(0 10px 40px var(--glow-purple));
+}
+@media (max-width: 900px) {
+  #masthead .cover { padding: 1em 1em 1.5em; }
+  #masthead .band { padding: 1.2em 1em 0.4em; }
+}
 
-/* section titles: a solid dark bar with white centred text */
-h2[id] {
-  background: var(--accent); color: #fff;
-  text-align: center; font-weight: 700; font-size: 1.35rem;
-  padding: 0.35em 0.5em; margin: 1.2em 0 0.9em;
+/* NAV: the site's nav type (DM Sans 500). Entries carry no margins:
+   the link's own padding sets the rhythm, so the list reads as one block. */
+#side-nav { background: var(--paper); border-right-color: var(--rule); }
+#side-nav .nav-container { margin: 1.25em 0.75em 2em; }
+#side-nav :is(h3, h4, h5) { font-family: var(--body-font); line-height: 1.3; margin: 0; }
+#side-nav h3 {
+  font-size: 0.85rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--muted); padding: 0 0.7rem; margin-bottom: 0.6em;
 }
-h3, h4 { font-weight: 700; font-size: 1.05rem; margin: 1em 0 0.4em; }
-h4 { font-size: 1rem; }
-/* function headings: a grey band, dark text, left aligned */
-h3.band { background: var(--band); padding: 0.25em 0.6em; font-size: 1.15rem; }
-.num { font-weight: 400; }
-.topic.level-3 { margin-top: 1.5em; }
+#side-nav h4 { font-size: 1.0625rem; font-weight: 500; color: var(--ink-strong); }
+/* sub-entries hang off a hairline under their parent */
+#side-nav h5 {
+  font-size: 1rem; font-weight: 400; color: var(--muted);
+  margin-left: 0.7rem; border-left: 1px solid var(--rule);
+}
+#side-nav h4 + h5 { padding-top: 0.15em; }
+#side-nav h5 + h4 { margin-top: 0.15em; }
+#side-nav a { display: block; padding: 0.3em 0.7rem; border-radius: 6px; }
+#side-nav h5 a { padding: 0.18em 0.7rem; }
+#side-nav a:hover { background: rgba(124, 58, 237, 0.08); color: var(--purple); text-decoration: none; }
+#toc-mobile a:hover { color: var(--purple); text-decoration: none; }
+
+/* section titles: the site's section-title, with a purple-to-cyan bar */
+h2[id] {
+  font-weight: 700; font-size: clamp(1.5rem, 2.4vw, 2rem);
+  letter-spacing: -0.5px; color: var(--ink-strong);
+  margin: 1.4em 0 0.9em; padding-bottom: 0.45em; position: relative;
+}
+h2[id]::after {
+  content: ""; position: absolute; left: 0; bottom: 0;
+  width: 3.5rem; height: 3px; border-radius: 2px;
+  background: linear-gradient(90deg, var(--purple), var(--cyan));
+}
+h3, h4 { font-weight: 700; font-size: 1.15rem; margin: 1.1em 0 0.45em; color: var(--ink-strong); }
+h4 { font-size: 1.02rem; }
+/* function headings: a purple pill tag. Block with fit-content, never
+   inline-block: column-span only applies to block-level boxes, and an
+   inline-block heading drops into the left column. */
+h3.band {
+  display: block; width: fit-content;
+  padding: 0.3em 1em; border-radius: 100px;
+  background: rgba(124, 58, 237, 0.08); border: 1px solid rgba(124, 58, 237, 0.25);
+  color: var(--purple-dark); font-size: 0.95rem; letter-spacing: 1.5px; text-transform: uppercase;
+}
+.num { font-weight: 700; color: var(--purple); }
+/* a hairline parts function blocks, as the full-width band did in print */
+.topic.level-3 { margin-top: 2em; padding-top: 1.5em; border-top: 1px solid var(--rule); }
 
 ul.squares, ul.dots, ul.dashes { padding-left: 1.2em; }
 ul.squares { list-style: square; }
 ul.dots { list-style: disc; }
-ul.dashes { list-style: "-- "; }
+ul.dashes { list-style: "-- "; padding-left: 0; list-style-position: inside; }
+li::marker { color: var(--purple); }
 li { margin-bottom: 0.35em; }
 .note { font-size: 0.95em; }
+a { color: var(--purple); text-underline-offset: 2px; }
+a:hover { color: var(--purple-dark); }
 
-#side-nav a:hover, #toc-mobile a:hover { color: var(--orange); }
-
-/* connection card: medium weight, FAQ questions reversed out as in print */
+/* connection card: medium weight, FAQ questions as dark card chips */
+/* FAQ questions are peers set side by side, as in print: none spans */
+.topic.faq > .keep-together:first-child > h3:first-child { column-span: none; }
 .card { font-weight: 500; }
 .conn-row { margin-bottom: 1.4em; }
 .conn-row img { width: 100%; max-width: 40rem; }
 .faq h3 {
-  display: inline-block; background: var(--accent); color: #fff;
-  padding: 0.15em 0.5em; font-size: 0.95rem;
+  display: inline-block; background: var(--card-dark); color: var(--on-dark);
+  padding: 0.3em 0.8em; border-radius: var(--radius-sm); font-size: 0.95rem;
 }
 .qr { display: inline-block; text-align: center; margin-right: 1.5em; }
 .qr img { width: 8.5rem; margin: 0 auto 0.3em; }
-.qr figcaption { font-size: 0.85em; max-width: 14rem; }
-.qr-row { display: flex; flex-wrap: wrap; gap: 0 1em; }
+.qr figcaption { font-size: 0.85em; max-width: 14rem; color: var(--muted); }
+.qr-row { display: flex; flex-wrap: wrap; gap: 0 1em; justify-content: center; }
 
 /* panel figures */
 .panel-figure img { width: 100%; max-width: 60rem; }
 .side-fig { max-width: 12rem; }
 .topic img { max-width: min(36rem, 100%); }
+.topic img.side-fig { float: right; max-width: 10rem; margin: 0 0 0.5em 1em; }
 
-/* display mockups transcribed: rounded frame, grey oblique title,
-   value and knob number in the printed maroon */
+/* spec sheet: a rounded card with the site's dark header */
+.doc-table thead th { background: var(--card-dark); color: var(--on-dark); font-family: var(--head-font); }
+.doc-table th, .doc-table td { border-color: var(--rule); }
+.doc-table.spec { border: 1px solid var(--rule); border-radius: var(--radius-sm); border-collapse: separate; border-spacing: 0; overflow: hidden; }
+.doc-table.spec th, .doc-table.spec td { border-width: 0 0 1px; }
+.doc-table.spec tr:last-child > * { border-bottom: 0; }
+.doc-table.spec th {
+  font-weight: 400; vertical-align: middle; width: 14em; text-align: left;
+  background: var(--paper); color: var(--ink-strong);
+}
+.doc-table.spec tr.out td { border-bottom: 0; }
+.doc-table.spec tr.out + tr td { border-top: 0; }
+
+.callout {
+  background: var(--paper); border-left-color: var(--purple);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+footer { color: var(--muted); border-top: 1px solid var(--rule); }
+
+/* print weights carried over */
+.note.bold, ul.features > li { font-weight: 700; }
+ul.features > li:last-child { font-weight: 400; }
+.topic-group > .topic:first-child + .topic > .keep-together > h3 { margin-top: 0; }
+#fcc-radiation-exposure-statement { font-weight: 400; }
+.note.bold strong, ul.features strong { font-weight: inherit; }
+
+/* DEVICE UI: the keyboard's own display, transcribed as printed. Colours,
+   frame and Inter oblique stay the manual's, never the site's palette. */
 .screens { display: flex; flex-wrap: wrap; gap: 1em; align-items: flex-start; }
 table.screen {
-  border: 2px solid var(--ink); border-radius: 12px;
+  border: 2px solid var(--screen-frame); border-radius: 12px;
   border-collapse: separate; border-spacing: 0;
   padding: 0.3em 0.8em 0.5em; margin-bottom: 1em;
-  min-width: 13rem; font-style: italic; font-weight: 700;
+  min-width: 13rem; font-family: "Inter", system-ui, sans-serif;
+  font-style: italic; font-weight: 700; color: var(--screen-frame);
+  line-height: 1.6;
 }
 table.screen caption {
   caption-side: top; text-align: left; color: var(--screen-title);
   font-size: 1.15em; padding: 0.3em 0 0.1em;
 }
-table.screen td { color: var(--screen-value); padding: 0.05em 0; }
-table.screen td + td { text-align: right; padding-left: 1.5em; }
-table.screen td.hl { color: var(--screen-hl); }
-.screen-img { width: 12rem; }
-
-.doc-table.spec th { font-weight: 700; width: 14em; text-align: left; }
-.doc-table th, .doc-table td { border-color: var(--ink); }
-
-/* review pass */
-.num { font-weight: 700; }
-.note.bold, ul.features > li { font-weight: 700; }
-ul.features > li:last-child { font-weight: 400; }
-.topic img.side-fig { float: right; max-width: 10rem; margin: 0 0 0.5em 1em; }
-.topic-group > .topic:first-child + .topic > .keep-together > h3 { margin-top: 0; }
-table.screen td { color: var(--screen-title); }
+table.screen td { color: var(--screen-title); padding: 0.05em 0; }
 table.screen td b { color: var(--screen-value); font-weight: inherit; }
-table.screen td + td { color: var(--screen-value); }
+table.screen td + td { text-align: right; padding-left: 1.5em; color: var(--screen-value); }
+table.screen td.hl { color: var(--screen-hl); }
 table.screen .pager { color: var(--screen-value); float: right; font-style: normal; font-size: 0.8em; padding-top: 0.2em; }
-.doc-table.spec th { font-weight: 400; vertical-align: middle; }
-.doc-table.spec tr.out td { border-bottom: 0; }
-.doc-table.spec tr.out + tr td { border-top: 0; }
-.qr-row { justify-content: center; }
-ul.dashes { padding-left: 0; list-style-position: inside; }
-#fcc-radiation-exposure-statement { font-weight: 400; }
-.note.bold strong, ul.features strong { font-weight: inherit; }
+.screen-img { width: 12rem; }
 /* the printed title sits inside the frame; block display pulls the caption in */
 table.screen { display: block; width: max-content; }
 table.screen caption { display: block; }
