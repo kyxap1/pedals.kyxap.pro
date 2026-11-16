@@ -23,6 +23,8 @@ run gets expensive fast. None of this narrows what you check:
   and table cells with the PDF text; its misses that aren't in
   `copy-changes.md` are findings. Spend your looks on what text can't
   show: layout, figures, formatting, tables' structure, the masthead.
+  `check_copy.py` passes a typo copied verbatim from the print; proofreading
+  belongs to the separate copy-proofread pass, not to you.
 - **Pairs first.** Each progress line names the section's pair, its PDF
   region beside its desktop screenshot, cut by the builder: compare from it.
   Where no pair covers a question, set the segments and PDF pages side by

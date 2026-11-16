@@ -187,6 +187,12 @@ anything can be called wrong. Establish which before reporting a defect.
   effect-type word (`compressor`, `overdrive`, `delay`, `pedal`); `variant` is
   the qualifier (`mini`, `deluxe`, `v2`), omitted when there is none. Don't
   abbreviate or invent words: "Mini Ego Compressor" → `wampler-ego-mini/`.
+- **One manual for a whole product line** (the ESP guitars Owner's Manual
+  covers every model): no model-specific document exists, so the page is the
+  brand's, not the device's. Name the directory after the document,
+  `<brand>-<document>/` (`esp-owners-manual/`), keep the masthead free of any
+  one model's photo, and give each owned device its own catalog card (step 6)
+  pointing at that directory; a second device of the brand adds only a card.
 
 ### 2. Extract
 
@@ -402,7 +408,13 @@ the reviewer then flagged.
 Where the sources disagree on a fact — the quick-start card says the power
 supply is included and the manual says it isn't, one CC number is mapped to
 two parameters — neither is a typo. Keep each as printed and list the conflict
-in the report instead of picking one.
+in the report instead of picking one. This covers separate documents, or a
+fact whose true value can't be told from the PDF. An inconsistency inside one
+document is a copy error and gets corrected and logged: a contents entry
+worded unlike its heading ("CONTROLS & ELECTRONICS" vs "CONTROLS /
+ELECTRONICS"), one address spelled two ways, a word that plainly means
+another ("factory straps" for strap buttons), body text naming a part
+differently from the figure it cites.
 
 Makers build manuals from shared templates, and steps carry leftovers from
 other products: the BOSS XS-1 manual says to plug into an "INPUT A (MONO)"
@@ -617,7 +629,21 @@ findings share one cause (a heading outside its `.keep-together`, a missing
 - `scripts/check_copy.py <pedal-dir>/index.html <pdf>…` looks every
   sentence, heading, caption and table cell up in the PDFs' text. Each miss
   is either a row in `copy-changes.md` or a conversion error to fix; it
-  can't see order, row placement, formatting or text under 4 letters.
+  can't see order, row placement, formatting or text under 4 letters. Nor
+  can it see a typo copied from the print: verbatim text is found in the PDF
+  and passes.
+- **Copy proofread**, one text-only subagent over the whole page, launched
+  alongside the reviewers. It reads `copy-changes.md` first, then compares the
+  page text with `pdftotext -layout` section by section — omissions,
+  duplicates, every number, unit and direction, each `#fig-N` link against
+  its caption — and proofreads the page copy for what step 4 says to fix:
+  spelling, grammar and agreement, mid-sentence capitals, hyphens standing in
+  for dashes, a word spelled two ways on the page, inconsistencies inside one
+  document. It reads images only where text can't answer (a card with no text
+  layer, an alt text to check), edits nothing and reports each finding with
+  the page string and the PDF string. The ESP job's two reviewers, told the
+  copy was already checked, passed fifteen print typos that this pass found
+  for 3 images.
 - Hand the looking to fresh subagents, the **reviewers**: they check what
   converted wrong and tell you (the main model) what to fix. One reviewer
   over the whole page doesn't work: every image it reads is re-sent on each
@@ -695,7 +721,15 @@ gets missed.
 - **Files** — the pedal directory and what moved into it, the catalog card,
   `catalog.yaml`, scratch deleted, commit status.
 
-Once they accept it, look back at what this job actually taught you: a
+Once they accept it, re-read this `SKILL.md` and the `references/` files
+before writing a single suggestion: whatever you remember of them was read at
+the start of the job, or survives only as a compaction summary. Each
+suggestion is checked against the current text — drop one the skill already
+covers, and name the rule a gap contradicts or leaves open. Proposed from
+memory, the ESP job offered a masking script whose rule step 4 already
+states, and missed both of its real gaps.
+
+Then look back at what this job actually taught you: a
 masthead proportion worth measuring rather than eyeballing, a same-brand quirk,
 a layout call this manual forced, an extraction edge case you had to work
 around. Write these as concrete, reusable suggestions for updating this skill
