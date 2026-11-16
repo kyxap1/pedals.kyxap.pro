@@ -1,0 +1,297 @@
+/* Fonts: Frutiger-LightCn 300 -> Fira Sans Condensed 300 (body), Frutiger-Cn 400 -> 400
+   (Note:, run-in terms, figure refs, table row labels), Frutiger-BoldCn 700 -> 700 (headings,
+   table titles). Arial only sets the numbers inside the figures. */
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@300;400;700&display=swap");
+
+:root {
+  --ink: #231f20;    /* body text, the cover panel, table title bars */
+  --accent: #231f20; /* the manual is monochrome: the cover's ground is the accent */
+  --band: #939598;   /* the cover's title band */
+  --rule: #d1d3d4;   /* hairlines either side of the band */
+  --paper: #e6e7e8;  /* table column-head row */
+  --muted: #58595b;  /* the cover's line art */
+  --link: #231f20;
+  --body-font: "Fira Sans Condensed", "Arial Narrow", sans-serif;
+  --head-font: var(--body-font);
+}
+
+/* ---- structure: keep as is, restyle below the brand line ---- */
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin-top: 0; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: #fff;
+  font-family: var(--body-font);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+h1, h2, h3, h4, h5, h6 { font-family: var(--head-font); line-height: 1.2; }
+
+main { margin-left: 20vw; padding-bottom: 3em; }
+footer { margin-left: 20vw; padding: 1.6em 3em; }
+
+a { color: var(--link); }
+
+img { max-width: 100%; height: auto; margin-bottom: 0.75em; }
+.topic > img, li > img, figure > img { display: block; }
+figure { margin: 0 0 1em; }
+
+/* NAV */
+#side-nav {
+  position: fixed; top: 0; left: 0;
+  width: 20vw; height: 100%;
+  overflow-y: auto;
+  background: #fff;
+  border-right: 1px solid var(--rule);
+  z-index: 5;
+}
+.nav-container { display: flex; flex-direction: column; margin: 1.5em 1em; }
+#side-nav h4, #side-nav h5 { font-weight: 400; margin-bottom: 0.45em; }
+#side-nav h4 { font-weight: 700; }
+#side-nav h5 { font-size: 0.9em; margin-left: 1em; }
+#side-nav a, #toc-mobile a { color: inherit; text-decoration: none; }
+#side-nav a:hover, #toc-mobile a:hover { text-decoration: underline; }
+
+/* SECTIONS */
+section + section { margin-top: 3em; }
+.flex-container { display: flex; padding-left: 2em; }
+/* A container has no intrinsic width: a half-container sized by its
+   content (width: auto) collapses to 0 unless it sets container-type: normal. */
+.half-container { width: 100%; padding: 0 1em; container-type: inline-size; }
+.half-container > header { column-span: all; }
+.flow > * + * { margin-bottom: 1em; }
+
+/* One .topic per heading carries the columns, so no column runs taller than
+   one topic. 63rem below = the two-column threshold of `columns: 2 30rem`. */
+.topic { columns: 2 30rem; column-gap: 3em; }
+.no-columns { columns: auto !important; }
+/* a heading stands above everything it introduces. column-span needs a
+   block-level box: a pill heading takes width: fit-content, never inline-block */
+:not(.topic-group) > .topic > .keep-together:first-child > :is(h3, h4):first-child,
+:not(.topic-group) > .topic > :is(h3, h4):first-child { column-span: all; }
+/* topics the source sets on one page share its columns, each whole in one */
+.topic-group { columns: 2 30rem; column-gap: 3em; }
+.topic-group > .topic { columns: auto; break-inside: avoid; }
+/* the right column's first heading loses its margin at the break; so does the left's */
+.topic-group > .topic:first-child,
+.topic-group > .topic:first-child > :is(h3, h4):first-child,
+.topic-group > .topic:first-child > .keep-together:first-child > :is(h3, h4):first-child { margin-top: 0; }
+
+/* COLUMN BREAKS. A paragraph, list item, figure, table or callout is never
+   cut by the gutter. Chrome's balancer drops `break-after: avoid` when it
+   gets in the way, so it is only a hint: what keeps a heading off a column's
+   foot is a .keep-together holding the heading and its first block. */
+p, li, figure, table, .table-scroll, .keep-together, .callout, .grid-wrapper {
+  break-inside: avoid;
+}
+h2, h3, h4, h5, h6 { break-after: avoid; }
+/* a lead-in ending in ":" stays with what it introduces */
+:has(+ p > .menu-path:only-child) { break-after: avoid; }
+@container (min-width: 63rem) {
+  .column-end { break-after: column; }
+}
+
+/* Figure rows: the max stays indefinite, or auto-fit counts its tracks off
+   it and stacks one figure per row in a narrow column. */
+.grid-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(8em, 100%), 1fr));
+  gap: 1em;
+}
+.grid-wrapper img { width: 100%; }
+
+/* TABLES */
+.table-scroll { overflow-x: auto; margin-bottom: 1em; }
+.doc-table { width: 100%; border-collapse: collapse; font-size: 0.92em; }
+.doc-table th, .doc-table td {
+  padding: 0.4em 0.6em;
+  text-align: left;
+  vertical-align: top;
+  border: 1px solid var(--rule);
+}
+.doc-table thead th { background: var(--accent); color: #fff; }
+
+.callout {
+  background: var(--paper);
+  border-left: 4px solid var(--accent);
+  padding: 0.7em 1em;
+  margin-bottom: 1em;
+}
+.callout > :last-child { margin-bottom: 0; }
+
+@media (max-width: 900px) {
+  .flex-container { flex-direction: column; padding-left: 0; }
+  .half-container { padding: 0 1em; }
+  nav { display: none; }
+  main, footer { margin: 0 auto; }
+  footer { padding: 1.6em 1em; }
+  #toc-mobile { display: block; }
+  /* a diagram with small labels scrolls instead of shrinking */
+  .wide-figure { overflow-x: auto; }
+  .wide-figure img { min-width: 700px; }
+}
+/* 901, not 900: at exactly 900px both queries match and the mobile TOC
+   would vanish together with the nav */
+@media (min-width: 901px) { #toc-mobile { display: none; } }
+
+/* ---- brand: masthead, heading treatment, callouts, from this manual ---- */
+
+body { font-weight: 300; font-size: 1.0625rem; }
+/* the manual's emphasis is Frutiger Cn (Roman) against Light Cn body text */
+strong, b { font-weight: 400; }
+a { text-decoration-color: var(--band); text-underline-offset: 0.15em; }
+a:hover { text-decoration-color: currentColor; }
+/* inline figure references are set in Roman, like "Note:" */
+a.fig-ref { font-weight: 400; text-decoration: none; }
+a.fig-ref:hover { text-decoration: underline; }
+
+/* MASTHEAD: the cover, top to bottom — the dark panel with its guitar line art
+   and the white logo bottom-right, the grey band with the letter-spaced title
+   between hairlines, the version flush right under it */
+#masthead { margin-bottom: 2.5em; }
+.cover-panel {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  min-height: 19rem;
+  padding: 2rem 3rem 1.6rem;
+  background: var(--ink) url("Images/cover-panel.jpg") left bottom / auto 135% no-repeat;
+}
+#masthead h1 { margin: 0; line-height: 0; }
+#masthead h1 img { width: min(15rem, 45vw); margin: 0; }
+.cover-band {
+  margin: 0;
+  padding: 0.5em 1em;
+  background: var(--band);
+  border-top: 3px solid var(--rule);
+  border-bottom: 3px solid var(--rule);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.35rem;
+  letter-spacing: 0.38em;
+  text-align: center;
+  text-transform: uppercase;
+}
+.cover-version {
+  margin: 0.6em 3rem 0 0;
+  text-align: right;
+  font-size: 0.95rem;
+  letter-spacing: 0.3em;
+}
+
+/* HEADINGS: bold condensed, black, no rule or block — h2 all caps, h3 mixed
+   case at about body size, as the print sets them straight onto their text */
+.flow h2 { font-size: 1.55rem; font-weight: 700; text-transform: uppercase; margin: 0 0 0.7em; }
+.flow h3 { font-size: 1.15rem; font-weight: 700; margin: 1.2em 0 0.25em; }
+.flow h4 { font-size: 1.05rem; font-weight: 400; text-decoration: underline; margin: 1.2em 0 0.4em; }
+.flow h3 + p, .flow h4 + p { margin-top: 0; }
+#side-nav h3, #toc-mobile h2 { text-transform: uppercase; letter-spacing: 0.08em; }
+#toc-mobile h4 { font-weight: 700; margin-bottom: 0.45em; }
+#toc-mobile h5 { font-weight: 400; font-size: 0.9em; margin: 0 0 0.45em 1em; }
+
+/* the intro on page 1 is a size up from body */
+.intro p { font-size: 1.15em; }
+
+/* FIGURES: line art in its column; caption "Figure N:" in Roman, title in Light */
+figure { break-inside: avoid; margin: 0.4em 0 1.2em; }
+figure img { display: block; margin: 0 auto 0.3em; }
+figcaption { text-align: center; font-size: 0.92em; }
+figcaption b { font-weight: 400; }
+figure.caption-top { display: flex; flex-direction: column-reverse; }
+figure.caption-top figcaption { margin-bottom: 0.4em; }
+.fig-sm img { width: min(15rem, 100%); }
+.fig-md img { width: min(24rem, 100%); }
+.fig-lg img { width: min(40rem, 100%); }
+.fig-tall img { width: min(10rem, 100%); }
+.fig-xl { column-span: all; }
+/* a figure taller than its text floats beside it, as printed, instead of stretching one column */
+.fig-float { float: right; margin: 0 0 1em 2.5em; }
+.measure { max-width: 60rem; }
+.fig-xl img { width: min(52rem, 100%); }
+
+/* ANATOMY: the diagram beside its numbered key, as printed */
+.anatomy { display: grid; grid-template-columns: minmax(14em, 24em) 1fr; gap: 2em; align-items: start; column-span: all; max-width: 56rem; }
+.anatomy ol { columns: 2 12em; margin: 0; padding-left: 1.8em; }
+.anatomy li { margin-bottom: 0.15em; }
+.anatomy figure { margin: 0; }
+.anatomy figure img { width: 100%; }
+
+/* STEPS and the exclusions: hanging numbers */
+ol.steps { padding-left: 1.8em; }
+ol.steps > li { margin-bottom: 0.5em; }
+ol.steps > li::marker { font-weight: 400; }
+
+/* TABLES: title in a solid black bar, grey column-head row, black rules, black box */
+.doc-table { border: 1px solid var(--ink); font-size: 0.95em; }
+.doc-table caption {
+  position: relative;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 700;
+  padding: 0.3em 0.6em;
+  text-align: center;
+}
+/* out of the flow, so the title stays centred over the whole table */
+.doc-table caption small { position: absolute; right: 0.75em; top: 0.55em; font-weight: 300; font-size: 0.8em; }
+.doc-table th, .doc-table td { border: 0; border-bottom: 1px solid var(--ink); padding: 0.25em 0.6em; }
+.doc-table thead th { background: var(--paper); color: var(--ink); font-weight: 400; }
+.doc-table tbody th { font-weight: 400; }
+/* the action and pickup tables set their row labels Light, like the values */
+.labels-light tbody th { font-weight: 300; }
+/* the gauge table's columns stretched to screen width need vertical rules to read apart */
+.doc-table th + th, .doc-table th + td, .doc-table td + td { border-left: 1px solid var(--rule); }
+.table-wide { column-span: all; max-width: 48rem; }
+.table-narrow { max-width: 30rem; }
+
+/* WARRANTY: all-caps legal paragraphs as printed */
+.legal { font-size: 0.95em; }
+.legal.roman { font-weight: 400; }
+.lead-bold, .lead-bold a { font-weight: 700; }
+
+/* REGISTRATION CARD: the printed form as field lists — title in bold over a rule,
+   group names reversed out of black bars and letter-spaced, as on the card;
+   the keep-for-your-records panel on its grey ground */
+.card { break-inside: avoid; border: 1px solid var(--rule); padding: 0.8em 1em; margin-bottom: 1.2em; }
+.card.records { background: #e9e9e9; }
+/* on the keep-for-records half the group names are dark letter-spaced caps, not bars */
+.card.records h5 { background: none; color: var(--ink); text-align: left; padding: 0; }
+.detach { margin: 0 0 0.6em; padding-top: 0.4em; border-top: 1px dashed var(--band); font-size: 0.8em; letter-spacing: 0.2em; text-align: center; }
+.card > h4 { margin: 0 0 0.4em; padding-bottom: 0.2em; font-weight: 700; text-decoration: none; border-bottom: 1px solid var(--ink); }
+.card > h4 small { font-weight: 300; font-size: 1em; }
+.card h5 {
+  margin: 0.9em 0 0.4em;
+  padding: 0.15em 0.5em;
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.8em;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-align: center;
+  text-transform: uppercase;
+}
+.card p { margin: 0 0 0.4em; }
+.card dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 0.3em 0.8em; }
+.card dt { font-weight: 400; }
+.card dd { margin: 0; border-bottom: 1px solid var(--band); }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+.contact p { margin: 0 0 0.2em; }
+
+footer { font-size: 0.9em; color: var(--muted); border-top: 1px solid var(--rule); }
+
+@media (max-width: 900px) {
+  .cover-panel { min-height: 12rem; padding: 1.5rem 1rem 1rem; background-size: auto 150%; }
+  .cover-band { font-size: 0.95rem; letter-spacing: 0.22em; }
+  .cover-version { margin-right: 1rem; }
+  #toc-mobile { order: -1; margin-bottom: 2em; }
+  .anatomy { grid-template-columns: 1fr; }
+  .fig-float { float: none; margin: 0 0 1em; }
+  .anatomy figure img { width: min(20rem, 100%); margin: 0 auto; }
+}
